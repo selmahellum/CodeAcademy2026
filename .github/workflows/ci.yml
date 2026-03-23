@@ -2,8 +2,6 @@ name: Test idempotweet
 
 on:
   pull_request:
-    paths:
-      - '1-DevOps/idempotweet/**'
   workflow_call:
 
 jobs:
