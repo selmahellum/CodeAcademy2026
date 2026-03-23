@@ -1,0 +1,34 @@
+name: Test idempotweet
+on:
+  pull_request:
+    paths:
+      - '1-DevOps/idempotweet/**'
+  workflow_call:
+
+defaults:
+  run:
+  working-directory: 1-DevOps/idempotweet
+
+  steps:
+  - name: Checkout code
+    uses: actions/checkout@v3
+  - name: Set up Node.js
+    uses: actions/setup-node@v3
+    with:
+      node-version: '20'
+  - name: Activate corepack
+    run: corepack enable
+    working-directory: .
+  - name: Install dependencies
+    run: yarn install --immutable
+  - name: Run tests
+    run: yarn test
+  - name: generate test coverage
+    run: yarn test:coverage
+  - name: SonarQube Scan
+    uses: SonarSource/sonarqube-scan-action@v6
+    with:
+      projectBaseDir: 1-DevOps/idempotweet
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
